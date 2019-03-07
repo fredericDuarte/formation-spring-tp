@@ -5,4 +5,7 @@
 .project
 .settings/
 .tmp/
+build/
+out/
+gradle/
 
