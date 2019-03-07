@@ -21,6 +21,7 @@ public class Captor {
 
     /**
      * Constructor to use with required property
+     *
      * @param name
      */
     public Captor(String name) {
