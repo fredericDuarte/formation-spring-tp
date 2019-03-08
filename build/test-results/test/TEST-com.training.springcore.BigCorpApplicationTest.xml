@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.training.springcore.BigCorpApplicationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-03-07T11:14:04" hostname="DESKTOP-TS8KKEA" time="0.018">
+<testsuite name="com.training.springcore.BigCorpApplicationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-03-08T10:40:26" hostname="DESKTOP-TS8KKEA" time="0.512">
   <properties/>
-  <testcase name="run" classname="com.training.springcore.BigCorpApplicationTest" time="0.018"/>
-  <system-out><![CDATA[Application startup
+  <testcase name="run" classname="com.training.springcore.BigCorpApplicationTest" time="0.512"/>
+  <system-out><![CDATA[Init SiteServiceImpl :com.training.springcore.service.SiteServiceImpl@30c0e762
+Application startup
+Appel de findById :com.training.springcore.service.SiteServiceImpl@30c0e762
+Site{id='siteA', name='Florange', captors=[Captor{id='e537d4fd-2819-4588-99d5-15ff1732e681', name='Capteur A'}]}
+Appel de findById :com.training.springcore.service.SiteServiceImpl@30c0e762
+Site{id='siteA', name='Florange', captors=[Captor{id='aca7a96b-d0ef-493a-86ae-712bde770700', name='Capteur A'}]}
 ]]></system-out>
-  <system-err><![CDATA[]]></system-err>
+  <system-err><![CDATA[mars 08, 2019 11:40:26 AM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+INFOS: Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@3d923667: startup date [Fri Mar 08 11:40:26 CET 2019]; root of context hierarchy
+mars 08, 2019 11:40:26 AM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
+INFOS: Loading XML bean definitions from class path resource [beans.xml]
+]]></system-err>
 </testsuite>

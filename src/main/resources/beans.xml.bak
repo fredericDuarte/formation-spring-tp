@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- nouveau instance à chaque appel -->
+    <!--   <bean id="siteService" class="com.training.springcore.service.SiteServiceImpl"  scope="prototype">  -->
+    <!-- instance une seule fois-->
+    <bean id="siteService" class="com.training.springcore.service.SiteServiceImpl"  lazy-init="true">
+
+    <constructor-arg ref="captorService"/>
+    </bean>
+    <bean id="captorService" class="com.training.springcore.service.CaptorServiceImpl" >
+    </bean>
+
+
+</beans>
