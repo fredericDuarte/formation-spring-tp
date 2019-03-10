@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Scope("prototype")
 public class SiteServiceImpl implements SiteService {
 
-    @Autowired
+
     private CaptorService captorService;
 
     public SiteServiceImpl() {

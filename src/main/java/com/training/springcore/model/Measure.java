@@ -13,8 +13,6 @@ public class Measure {
 
     private Instant instant;
     private Integer valueInWatt;
-
-    @Autowired
     private Captor captor;
 
 

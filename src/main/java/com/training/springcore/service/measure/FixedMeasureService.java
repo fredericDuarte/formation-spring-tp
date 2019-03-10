@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fixedMeasure")
 public class FixedMeasureService implements MeasureService {
     @Override
     public List<Measure> readMeasures(Captor captor, Instant start, Instant end, MeasureStep step) {

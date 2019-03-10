@@ -16,14 +16,22 @@ import java.util.Set;
 @Service
 public class CaptorServiceImpl implements CaptorService {
 
-    @Autowired
-    private FixedMeasureService fixed;
-    @Autowired
-    private SimulatedMeasureService simu;
-    @Autowired
-    private RealMeasureService real;
 
+    private MeasureService fixed;
+    private MeasureService simu;
+    private MeasureService real;
 
+    public CaptorServiceImpl() {
+    }
+
+    @Autowired
+    public CaptorServiceImpl(@Qualifier("fixedMeasure") MeasureService fixed,
+                             @Qualifier("simuMeasure") MeasureService simu,
+                             @Qualifier("realMeasure") MeasureService real) {
+        this.fixed = fixed;
+        this.simu = simu;
+        this.real = real;
+    }
 
     @Override
     public Set<Captor> findBySite(String siteId) {

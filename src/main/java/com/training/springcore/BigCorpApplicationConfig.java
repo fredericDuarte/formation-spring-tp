@@ -11,20 +11,30 @@ import org.springframework.context.annotation.*;
 @Configuration
 public class BigCorpApplicationConfig {
 
-   // @Bean
-    // ** nouveau instance à chaque appel -->
-   // @Scope("prototype")
-    // ou bien
-    //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-   // ** instance une seule fois
-   //@Lazy
+
     public SiteService siteService() {
         return new SiteServiceImpl(captorService());
     }
 
-    //@Bean
+
     public CaptorService captorService() {
-        return new CaptorServiceImpl();
+       // return new CaptorServiceImpl();
+
+        return new CaptorServiceImpl(fixed, simu, real);
     }
 
+    public FixedMeasureService fixed() {
+
+        return new FixedMeasureService();
+    }
+
+    public RealMeasureService real() {
+
+        return new RealMeasureService();
+    }
+
+    public SimulatedMeasureService simu() {
+
+        return new SimulateMeasureService();
+    }
 }
