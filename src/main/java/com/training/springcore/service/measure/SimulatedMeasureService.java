@@ -22,4 +22,11 @@ public class SimulatedMeasureService implements MeasureService {
         }
         return measures;
     }
+
+    @Override
+    public String toString() {
+        return "SimulatedMeasureService{}";
+    }
+
+
 }

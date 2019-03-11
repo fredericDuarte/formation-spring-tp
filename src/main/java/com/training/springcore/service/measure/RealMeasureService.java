@@ -23,4 +23,9 @@ public class RealMeasureService implements MeasureService {
         }
         return measures;
     }
+
+    @Override
+    public String toString() {
+        return "RealMeasureService{}";
+    }
 }

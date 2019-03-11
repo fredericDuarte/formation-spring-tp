@@ -4,6 +4,9 @@ import com.training.springcore.service.CaptorService;
 import com.training.springcore.service.CaptorServiceImpl;
 import com.training.springcore.service.SiteService;
 import com.training.springcore.service.SiteServiceImpl;
+import com.training.springcore.service.measure.FixedMeasureService;
+import com.training.springcore.service.measure.RealMeasureService;
+import com.training.springcore.service.measure.SimulatedMeasureService;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.*;
 
@@ -18,9 +21,7 @@ public class BigCorpApplicationConfig {
 
 
     public CaptorService captorService() {
-       // return new CaptorServiceImpl();
-
-        return new CaptorServiceImpl(fixed, simu, real);
+         return new CaptorServiceImpl(fixed(), simu(), real());
     }
 
     public FixedMeasureService fixed() {
@@ -35,6 +36,6 @@ public class BigCorpApplicationConfig {
 
     public SimulatedMeasureService simu() {
 
-        return new SimulateMeasureService();
+        return new SimulatedMeasureService();
     }
 }

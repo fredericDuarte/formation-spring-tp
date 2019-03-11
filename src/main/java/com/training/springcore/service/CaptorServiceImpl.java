@@ -4,9 +4,11 @@ import com.training.springcore.model.Captor;
 import com.training.springcore.model.Measure;
 import com.training.springcore.model.PowerSource;
 import com.training.springcore.service.measure.FixedMeasureService;
+import com.training.springcore.service.measure.MeasureService;
 import com.training.springcore.service.measure.RealMeasureService;
 import com.training.springcore.service.measure.SimulatedMeasureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

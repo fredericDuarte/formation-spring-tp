@@ -61,22 +61,25 @@ public class Captor {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Captor site = (Captor) o;
-        return Objects.equals(name, site.name);
+        if (!(o instanceof Captor)) return false;
+        Captor captor = (Captor) o;
+        return Objects.equals(id, captor.id) &&
+                Objects.equals(name, captor.name) &&
+                powerSource == captor.powerSource;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name);
+        return Objects.hash(id, name, powerSource);
     }
+
 
     @Override
     public String toString() {
         return "Captor{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", powerSource=" + powerSource +
                 '}';
     }
 }

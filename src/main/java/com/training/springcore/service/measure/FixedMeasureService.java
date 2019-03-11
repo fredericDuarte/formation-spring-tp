@@ -28,4 +28,8 @@ public class FixedMeasureService implements MeasureService {
     public String toString() {
         return "FixedMeasureService{}";
     }
+
+
+
+
 }
