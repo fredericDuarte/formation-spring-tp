@@ -5,8 +5,9 @@ import com.training.springcore.model.ApplicationInfo;
 import com.training.springcore.service.SiteService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-
+@EnableAspectJAutoProxy
 public class BigCorpApplication {
 
     public static void main(String[] args) {
