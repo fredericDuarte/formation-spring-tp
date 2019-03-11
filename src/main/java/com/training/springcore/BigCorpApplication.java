@@ -17,11 +17,12 @@ public class BigCorpApplication {
     public void run() {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        // changer de profil
+        // par la variable environnement ( voir slide )
+        // deb - ou changer manuellement  de profil
         context.getEnvironment().setActiveProfiles("prod");
         context.register(BigCorpApplicationConfig.class);
         context.refresh();
-
+        // fin
         System.out.println("Application startup");
 
         SiteService siteservice = context.getBean(SiteService.class);
