@@ -19,6 +19,12 @@ public class Captor {
      */
     private PowerSource powerSource;
 
+    /**
+     * Site
+     */
+    private Site site;
+
+
     @Deprecated
     public Captor() {
         // Use for serializer or deserializer
@@ -32,6 +38,23 @@ public class Captor {
     public Captor(String name, PowerSource powerSource) {
         this.name = name;
         this.powerSource = powerSource;
+
+    }
+
+    public Captor(String name, Site site) {
+        this.name = name;
+        this.site = site;
+    }
+
+    /**
+     * Constructor to use with required property
+     *
+     * @param name
+     */
+    public Captor(String name, PowerSource powerSource, Site site) {
+        this.name = name;
+        this.powerSource = powerSource;
+        this.site = site;
     }
 
     public String getId() {
@@ -58,6 +81,14 @@ public class Captor {
         this.powerSource = powerSource;
     }
 
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,14 +96,14 @@ public class Captor {
         Captor captor = (Captor) o;
         return Objects.equals(id, captor.id) &&
                 Objects.equals(name, captor.name) &&
-                powerSource == captor.powerSource;
+                powerSource == captor.powerSource &&
+                Objects.equals(site, captor.site);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, powerSource);
+        return Objects.hash(id, name, powerSource, site);
     }
-
 
     @Override
     public String toString() {
@@ -80,6 +111,7 @@ public class Captor {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", powerSource=" + powerSource +
+                ", site=" + site +
                 '}';
     }
 }
