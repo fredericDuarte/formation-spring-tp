@@ -9,6 +9,7 @@ import com.training.spring.bigcorp.service.measure.FixedMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -28,8 +29,10 @@ public class FixedMeasureServiceTest {
 
 
     @Configuration
-    @ComponentScan("com.training.spring.bigcorp.service")
+    @ComponentScan({"com.training.spring.bigcorp.service.measure",
+            "com.training.spring.bigcorp.config.properties"})
     @PropertySource("classpath:application.properties")
+    @EnableConfigurationProperties
     public static class MeasureServiceConfigurationTest {
     }
 

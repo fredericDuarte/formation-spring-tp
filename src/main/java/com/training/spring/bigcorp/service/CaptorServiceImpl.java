@@ -44,4 +44,12 @@ public class CaptorServiceImpl implements CaptorService {
         return captors;
     }
 
+    @Override
+    public String toString() {
+        return "CaptorServiceImpl{" +
+                "fixed=" + fixed +
+                ", simu=" + simu +
+                ", real=" + real +
+                '}';
+    }
 }

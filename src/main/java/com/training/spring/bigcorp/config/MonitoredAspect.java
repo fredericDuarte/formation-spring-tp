@@ -1,35 +1,42 @@
 package com.training.spring.bigcorp.config;
 
+import com.training.spring.bigcorp.service.SiteService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
-public class MonitoredAspect {
+public class MonitoredAspect { 
+    
+    private final static Logger logger = LoggerFactory.getLogger(SiteService.class);
+    
+    
 
     @Before("@annotation(com.training.springcore.aspect.Monitored)")
     public void logServiceBeforeCall(JoinPoint jp) {
-        System.out.println("Appel finder " + jp.getSignature());
+        logger.debug("Appel @Before :: " + jp.getSignature());
     }
 
     @AfterReturning(pointcut = "@annotation(com.training.springcore.aspect.Monitored)", returning = "element")
             public void logServiceAfterCall(JoinPoint jp, Object element) {
         if (element == null) {
-            System.out.println("Finder " + jp.getTarget() + "returns null");
+            logger.debug("Appel @AfterReturning :: " + jp.getTarget() + "returns null");
         } else {
-            System.out.println("Finder " + jp.getTarget() + "returns "
+            logger.debug("Appel @AfterReturning :: " + jp.getTarget() + "returns "
                     + element.toString());
         }
     }
 
     @AfterThrowing(pointcut = "@annotation(com.training.springcore.aspect.Monitored)", throwing = "ex")
     public void logServiceAfterException(RuntimeException ex) {
-        System.out.println("Error " + ex.getMessage());
+        logger.error("Error  @AfterThrowing :: ",ex.getMessage());
     }
 
     @After("@annotation(com.training.springcore.aspect.Monitored)")
     public void logServiceAfter(JoinPoint jp) {
-        System.out.println("Finder " + jp.getSignature() + " was called");
+        logger.debug("Appel @After :: " + jp.getSignature() + " was called");
     }
 }
