@@ -15,12 +15,12 @@ public class MonitoredAspect {
     
     
 
-    @Before("@annotation(com.training.springcore.aspect.Monitored)")
+    @Before("@annotation(com.training.spring.bigcorp.aspect.Monitored)")
     public void logServiceBeforeCall(JoinPoint jp) {
         logger.debug("Appel @Before :: " + jp.getSignature());
     }
 
-    @AfterReturning(pointcut = "@annotation(com.training.springcore.aspect.Monitored)", returning = "element")
+    @AfterReturning(pointcut = "@annotation(com.training.spring.bigcorp.aspect.Monitored)", returning = "element")
             public void logServiceAfterCall(JoinPoint jp, Object element) {
         if (element == null) {
             logger.debug("Appel @AfterReturning :: " + jp.getTarget() + "returns null");
@@ -30,12 +30,12 @@ public class MonitoredAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "@annotation(com.training.springcore.aspect.Monitored)", throwing = "ex")
+    @AfterThrowing(pointcut = "@annotation(com.training.spring.bigcorp.aspect.Monitored)", throwing = "ex")
     public void logServiceAfterException(RuntimeException ex) {
         logger.error("Error  @AfterThrowing :: ",ex.getMessage());
     }
 
-    @After("@annotation(com.training.springcore.aspect.Monitored)")
+    @After("@annotation(com.training.spring.bigcorp.aspect.Monitored)")
     public void logServiceAfter(JoinPoint jp) {
         logger.debug("Appel @After :: " + jp.getSignature() + " was called");
     }

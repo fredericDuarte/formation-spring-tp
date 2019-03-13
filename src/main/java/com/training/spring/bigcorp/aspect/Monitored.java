@@ -1,4 +1,4 @@
-package com.training.springcore.aspect;
+package com.training.spring.bigcorp.aspect;
 
 
 import java.lang.annotation.*;

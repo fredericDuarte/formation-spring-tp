@@ -1,11 +1,12 @@
 package com.training.spring.bigcorp.service;
 
+import com.training.spring.bigcorp.aspect.Monitored;
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.PowerSource;
 import com.training.spring.bigcorp.model.Site;
 import com.training.spring.bigcorp.repository.CaptorDao;
 import com.training.spring.bigcorp.service.measure.MeasureService;
-import com.training.springcore.aspect.Monitored;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

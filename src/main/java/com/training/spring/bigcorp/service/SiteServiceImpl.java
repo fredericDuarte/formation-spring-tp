@@ -1,7 +1,8 @@
 package com.training.spring.bigcorp.service;
+import com.training.spring.bigcorp.aspect.Monitored;
 import com.training.spring.bigcorp.config.properties.BigCorpApplicationProperties;
 import com.training.spring.bigcorp.model.Site;
-import com.training.springcore.aspect.Monitored;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
