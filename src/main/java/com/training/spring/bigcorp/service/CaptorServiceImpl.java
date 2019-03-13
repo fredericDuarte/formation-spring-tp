@@ -43,7 +43,6 @@ public class CaptorServiceImpl implements CaptorService {
     @Monitored
     @Override
     public Set<Captor> findBySite(String siteId) {
-
         return captorDao.findBySiteId(siteId).stream().collect(Collectors.toSet());
     }
 

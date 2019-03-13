@@ -9,14 +9,14 @@ public interface CrudDao<T, ID> {
     void create(T element);
 
     //read
-   T findbyId(ID id);
+   T findById(ID id);
    List<T> findAll();
 
    //Update
     void update(T element);
 
    //Delete
-   void deleteByID(ID id);
+   void deleteById(ID id);
 
 
 

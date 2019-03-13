@@ -31,9 +31,10 @@ public class SiteDaoImpl implements SiteDao {
     }
 
     @Override
-    public Site findbyId(String id) {
+    public Site findById(String s) {
+
         return jdbcTemplate.queryForObject("select id, name from SITE where id = :id ",
-        new MapSqlParameterSource("id", id),
+        new MapSqlParameterSource("id", s),
                 this::siteMapper);
     }
 
@@ -54,7 +55,9 @@ public class SiteDaoImpl implements SiteDao {
     }
 
     @Override
-    public void deleteByID(String s) {
+    public void deleteById(String s) {
+
+
 
         jdbcTemplate.update("delete from SITE where id =:id",
         new MapSqlParameterSource("id", s));

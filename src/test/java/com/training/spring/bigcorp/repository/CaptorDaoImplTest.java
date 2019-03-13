@@ -28,6 +28,11 @@ public class CaptorDaoImplTest {
     public void init(){
         site = new Site("name");
 
+        site.setId("site1");
+    }
+    @Test
+    public void findById() {
+        Captor captor = captorDao.findById("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Eolienne");
     }
     @Test
@@ -75,5 +80,6 @@ public class CaptorDaoImplTest {
         Assertions.assertThatThrownBy(() -> captorDao.deleteById("c1"))
                 .isExactlyInstanceOf(DataIntegrityViolationException.class);
     }
+
 
 }

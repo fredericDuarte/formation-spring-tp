@@ -31,15 +31,19 @@ public class CaptorDaoImpl implements CaptorDao {
     @Override
     public void create(Captor captor) {
 
-        jdbcTemplate.update("insert into CAPTOR (id, name) values (:id, :name)",
+        jdbcTemplate.update("insert into CAPTOR (id, name, site_id) values (:id, :name, :siteId)",
                 new MapSqlParameterSource()
                         .addValue("id", captor.getId())
-                        .addValue("name", captor.getName()));
+                        .addValue("name", captor.getName())
+                        .addValue("siteId", captor.getSite().getId())
+
+        );
 
     }
 
     @Override
-    public Captor findbyId(String s) {
+    public Captor findById(String s) {
+
         return jdbcTemplate.queryForObject("select id, name from CAPTOR where id = :id ",
                 new MapSqlParameterSource("id", s),
                 this::captorMapper);
@@ -53,7 +57,7 @@ public class CaptorDaoImpl implements CaptorDao {
     @Override
     public void update(Captor captor) {
 
-        jdbcTemplate.update("update CAPTOR set name = :name where id =:id",
+        jdbcTemplate.update("update CAPTOR set name = :name where id = :id",
                 new MapSqlParameterSource()
                         .addValue("id", captor.getId())
                         .addValue("name", captor.getName()));
@@ -61,16 +65,18 @@ public class CaptorDaoImpl implements CaptorDao {
     }
 
     @Override
-    public void deleteByID(String s) {
+    public void deleteById(String s) {
+
         jdbcTemplate.update("delete from CAPTOR where id =:id",
+
                 new MapSqlParameterSource("id", s));
 
     }
 
 
     private Captor captorMapper(ResultSet rs, int rowNum) throws SQLException {
-        Site site = new Site(rs.getString("site_name"));
-        site.setId(rs.getString("site_id"));
+        Site site = new Site(rs.getString("name"));
+        site.setId(rs.getString("id"));
         Captor captor = new Captor(rs.getString("name"), site);
         captor.setId(rs.getString("id"));
         return captor;
