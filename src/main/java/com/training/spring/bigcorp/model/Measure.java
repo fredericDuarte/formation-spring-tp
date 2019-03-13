@@ -2,19 +2,25 @@ package com.training.spring.bigcorp.model;
 
 
 
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
-
+@Entity
 public class Measure {
 
-
+    @Id
+    @GeneratedValue
     private long id;
 
+    @Column( nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private Instant instant;
-    private Integer valueInWatt;
-    private Captor captor;
 
+    @Column( nullable = false)
+    private Integer valueInWatt;
+
+    @ManyToOne
+    private Captor captor;
 
     public Measure(Instant instant, Integer valueInWatt, Captor captor) {
         this.instant = instant;
@@ -22,6 +28,8 @@ public class Measure {
         this.captor = captor;
     }
 
+    public Measure() {
+    }
 
     @Override
     public boolean equals(Object o) {

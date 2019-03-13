@@ -26,7 +26,7 @@ public class BigcorpApplication {
 		logger.info("Application startup");
 
 		SiteService siteservice = context.getBean(SiteService.class);
-		logger.info(siteservice.findById("siteA").toString());
+		//logger.info(siteservice.findById("siteA"));
 
 		logger.info("==========================================================");
 		logger.info("Application [" + applicationInfo.getName() + "] - version : "

@@ -1,23 +1,55 @@
 package com.training.spring.bigcorp.utils;
 
-
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.Site;
+
 import com.training.spring.bigcorp.repository.MeasureDao;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import java.util.List;
 
 @Repository
 public class MeasureDaoImpl implements MeasureDao {
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager em;
+
+    @Override
+    public void persist(Measure measure) {
+
+        em.persist(measure);
+    }
+
+    @Override
+    public Measure findById(Long aLong) {
+       return em.find(Measure.class, aLong);
+    }
+
+    @Override
+    public List<Measure> findAll() {
+
+        return em.createQuery("select c from Measure c inner join c.captor s",
+                Measure.class).getResultList();
+    }
+
+    @Override
+    public void delete(Measure id) {
+        em.remove(id);
+
+    }
+
+
+
+
+
+
+
+
+  /*  private NamedParameterJdbcTemplate jdbcTemplate;
 
     private H2DateConverter h2DateConverter;
 
@@ -94,4 +126,6 @@ public class MeasureDaoImpl implements MeasureDao {
         measure.setId(rs.getLong("id"));
         return measure;
     }
+
+    */
 }

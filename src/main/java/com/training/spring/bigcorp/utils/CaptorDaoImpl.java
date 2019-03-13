@@ -1,90 +1,55 @@
 package com.training.spring.bigcorp.utils;
 
 import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Site;
+
 import com.training.spring.bigcorp.repository.CaptorDao;
-import com.training.spring.bigcorp.repository.SiteDao;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import java.util.List;
 
 @Repository
 public class CaptorDaoImpl implements CaptorDao {
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-
-    private static String SELECT_WITH_JOIN =
-            "SELECT c.id, c.name, c.site_id, s.name as site_name " +
-                    "FROM Captor c inner join Site s on c.site_id = s.id ";
-
-
-    public CaptorDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public void create(Captor captor) {
-
-        jdbcTemplate.update("insert into CAPTOR (id, name, site_id) values (:id, :name, :siteId)",
-                new MapSqlParameterSource()
-                        .addValue("id", captor.getId())
-                        .addValue("name", captor.getName())
-                        .addValue("siteId", captor.getSite().getId())
-
-        );
+    public void persist(Captor captor) {
+        em.persist(captor);
 
     }
 
     @Override
-    public Captor findById(String s) {
-
-        return jdbcTemplate.queryForObject("select id, name from CAPTOR where id = :id ",
-                new MapSqlParameterSource("id", s),
-                this::captorMapper);
+    public Captor findById(String id) {
+        return em.find(Captor.class, id);
     }
 
     @Override
     public List<Captor> findAll() {
-        return jdbcTemplate.query(SELECT_WITH_JOIN, this::captorMapper);
-    }
 
-    @Override
-    public void update(Captor captor) {
-
-        jdbcTemplate.update("update CAPTOR set name = :name where id = :id",
-                new MapSqlParameterSource()
-                        .addValue("id", captor.getId())
-                        .addValue("name", captor.getName()));
-
-    }
-
-    @Override
-    public void deleteById(String s) {
-
-        jdbcTemplate.update("delete from CAPTOR where id =:id",
-
-                new MapSqlParameterSource("id", s));
-
-    }
-
-
-    private Captor captorMapper(ResultSet rs, int rowNum) throws SQLException {
-        Site site = new Site(rs.getString("name"));
-        site.setId(rs.getString("id"));
-        Captor captor = new Captor(rs.getString("name"), site);
-        captor.setId(rs.getString("id"));
-        return captor;
+        return em.createQuery("select c from Captor c inner join c.site s",
+                Captor.class).getResultList();
     }
 
 
     @Override
     public List<Captor> findBySiteId(String siteId) {
-        return null;
+        return em.createQuery("select c from Captor c inner join c.site s where s.id =:siteId",
+                Captor.class)
+                .setParameter("siteId", siteId)
+                .getResultList();
     }
+
+    @Override
+    public void delete(Captor captor) {
+
+        em.remove(captor);
+    }
+
+
+
 }

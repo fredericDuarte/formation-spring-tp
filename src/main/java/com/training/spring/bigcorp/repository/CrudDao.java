@@ -5,19 +5,13 @@ import java.util.List;
 
 public interface CrudDao<T, ID> {
 
-    //Create
-    void create(T element);
+    void persist(T element);
 
-    //read
-   T findById(ID id);
-   List<T> findAll();
+    T findById(ID id);
 
-   //Update
-    void update(T element);
+    List<T> findAll();
 
-   //Delete
-   void deleteById(ID id);
-
+    void delete(T id);
 
 
 }

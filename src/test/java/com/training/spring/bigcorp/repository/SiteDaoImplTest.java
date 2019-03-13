@@ -2,34 +2,32 @@ package com.training.spring.bigcorp.repository;
 
 
 import com.training.spring.bigcorp.model.Site;
-import com.training.spring.bigcorp.model.Site;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.ContextConfiguration;
+
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+
+
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@JdbcTest
-@ContextConfiguration(classes = {DaoTestConfig.class})
+@DataJpaTest
+@ComponentScan
 public class SiteDaoImplTest {
 
     @Autowired
     private SiteDao siteDao;
     private Site site;
-    @Before
-    public void init(){
-       // site = new Site("name");
 
-       // site.setId("site1");
-    }
+    
     @Test
     public void findById() {
         site = siteDao.findById("site1");
@@ -53,9 +51,9 @@ public class SiteDaoImplTest {
     
 
     @Test
-    public void create() {
+    public void persist() {
         Assertions.assertThat(siteDao.findAll()).hasSize(1);
-        siteDao.create(new Site("New Site"));
+        siteDao.persist(new Site("New Site"));
         Assertions.assertThat(siteDao.findAll())
                 .hasSize(2)
                 .extracting(Site::getName)
@@ -68,7 +66,7 @@ public class SiteDaoImplTest {
         Site Site = siteDao.findById("site1");
         Assertions.assertThat(Site.getName()).isEqualTo("Bigcorp Lyon");
         Site.setName("Bigcorp Lyon & Paris");
-        siteDao.update(Site);
+        siteDao.persist(Site);
         Site = siteDao.findById("site1");
         Assertions.assertThat(Site.getName()).isEqualTo("Bigcorp Lyon & Paris");
     }
@@ -78,15 +76,18 @@ public class SiteDaoImplTest {
     @Test
     public void deleteById() {
         Site newSite = new Site("New Site");
-        siteDao.create(newSite);
+        siteDao.persist(newSite);
         Assertions.assertThat(siteDao.findById(newSite.getId())).isNotNull();
-        siteDao.deleteById(newSite.getId());
+        siteDao.delete(newSite);
         Assertions.assertThat(siteDao.findById(newSite.getId())).isNull();
     }
     @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
-        Assertions.assertThatThrownBy(() -> siteDao.deleteById("site1"))
-                .isExactlyInstanceOf(DataIntegrityViolationException.class);
+        Site newsite = new Site("New site");
+        siteDao.persist(newsite);
+        Assertions.assertThat(siteDao.findById(newsite.getId())).isNotNull();
+        siteDao.delete(newsite);
+        Assertions.assertThat(siteDao.findById(newsite.getId())).isNull();
     }
 
 
