@@ -21,6 +21,9 @@ public abstract class Captor {
     private String name;
 
 
+    @Version
+    private int version;
+
 
     /**
      * Site
@@ -79,6 +82,14 @@ public abstract class Captor {
         this.site = site;
     }
 
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     @Override
     public boolean equals(Object o) {

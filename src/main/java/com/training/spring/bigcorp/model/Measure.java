@@ -19,6 +19,9 @@ public class Measure {
     @Column( nullable = false)
     private Integer valueInWatt;
 
+    @Version
+    private int version;
+
     @ManyToOne
     private Captor captor;
 
@@ -53,6 +56,14 @@ public class Measure {
                 ", watt=" + valueInWatt +
                 ", captor=" + captor +
                 '}';
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Instant getInstant() {
