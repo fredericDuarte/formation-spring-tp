@@ -1,6 +1,10 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -17,7 +21,9 @@ public abstract class Captor {
     /**
      * Captor name
      */
-    @Column(nullable = false)
+    @NotNull
+    @NotNull
+    @Size(min = 3, max = 100)
     private String name;
 
 

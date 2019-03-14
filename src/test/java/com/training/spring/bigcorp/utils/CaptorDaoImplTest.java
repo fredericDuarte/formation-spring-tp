@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.validation.constraints.AssertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -137,13 +138,12 @@ public class CaptorDaoImplTest {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("name", match -> match.ignoreCase().contains())
                 .withIgnorePaths("id")
-
                 .withIgnoreNullValues();
 
         Site site = new Site();
         site.setId("siteId");
 
-        Captor captor = new FixedCaptor("New captor", site, 850000);
+        Captor captor = new FixedCaptor("Eolienne", site, 850000);
 
         captor.setId("c1");
 
@@ -152,8 +152,22 @@ public class CaptorDaoImplTest {
                 .hasSize(1)
                 .extracting("id", "name")
                 .containsExactly(Tuple.tuple("c1", "Eolienne"));
+
     }
 
+
+
+
+    @Test
+    public void createSimulatedCaptorShouldThrowExceptionWhenMinMaxAreInvalid() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    captorDao.save(new SimulatedCaptor("Mon site", site, 10, 5));
+                    entityManager.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("minPowerInWatt should be less than maxPowerInWatt");
+    }
 
     @Test
     public void preventConcurrentWrite() {

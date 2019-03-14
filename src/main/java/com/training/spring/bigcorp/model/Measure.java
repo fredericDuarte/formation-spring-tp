@@ -3,6 +3,9 @@ package com.training.spring.bigcorp.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -13,10 +16,12 @@ public class Measure {
     @GeneratedValue
     private long id;
 
-    @Column( nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @NotNull
+    @Past
     private Instant instant;
 
-    @Column( nullable = false)
+    @NotNull
     private Integer valueInWatt;
 
     @Version

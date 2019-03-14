@@ -2,15 +2,25 @@ package com.training.spring.bigcorp.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("FIXED")
 public class FixedCaptor extends Captor{
 
+    @NotNull
     private Integer defaultPowerInWatt;
 
 
     public FixedCaptor() {
+    }
+
+    public FixedCaptor(String name) {
+        super(name);
+    }
+
+    public FixedCaptor(String name, Site site) {
+        super(name, site);
     }
 
     public FixedCaptor(String name, Site site, Integer defaultPowerInWatt) {

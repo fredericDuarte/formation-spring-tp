@@ -1,6 +1,10 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +20,8 @@ public class Site {
     /**
      * Site name
      */
-    @Column( nullable = false)
+    @NotNull
+    @Size(min = 3, max = 100)
     private String name;
 
     @Version
@@ -35,6 +40,7 @@ public class Site {
 
     /**
      * Constructor to use with required property
+     *
      * @param name
      */
     public Site(String name) {
