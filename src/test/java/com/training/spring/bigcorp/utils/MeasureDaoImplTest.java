@@ -1,10 +1,11 @@
-package com.training.spring.bigcorp.repository;
+package com.training.spring.bigcorp.utils;
 
 
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.Measure;
 
 import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.repository.MeasureDao;
 import org.assertj.core.api.Assertions;
 
 import org.junit.Test;
@@ -20,6 +21,7 @@ import java.time.Instant;
 import java.util.List;
 
 
+// Note :ComponentScan recherche les beans définis dans le package
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ComponentScan
@@ -32,7 +34,7 @@ public class MeasureDaoImplTest {
     public void findById() {
         Measure measure = measureDao.findById(-1L);
         Assertions.assertThat(measure.getId()).isEqualTo(-1L);
-        Assertions.assertThat(measure.getInstant()).isEqualTo(Instant.parse("2018-08-08T11:00:00.000Z"));
+        Assertions.assertThat(measure.getInstant()).isEqualTo(Instant.parse("2018-09-09T11:00:00.000Z"));
         Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
         Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Eolienne");
         Assertions.assertThat(measure.getCaptor().getSite().getName()).isEqualTo("Bigcorp Lyon");

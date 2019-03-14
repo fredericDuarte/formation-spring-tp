@@ -1,11 +1,13 @@
-package com.training.spring.bigcorp.repository;
+package com.training.spring.bigcorp.utils;
 
 
 import com.training.spring.bigcorp.model.Site;
 
+import com.training.spring.bigcorp.repository.SiteDao;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -27,6 +31,9 @@ public class SiteDaoImplTest {
     private SiteDao siteDao;
     private Site site;
 
+    @Autowired
+    private EntityManager entityManager;
+
     
     @Test
     public void findById() {
@@ -36,7 +43,7 @@ public class SiteDaoImplTest {
 
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        site = siteDao.findById("site1");
+        site = siteDao.findById("unknown");
         Assertions.assertThat(site).isNull();
     }
 
@@ -83,11 +90,15 @@ public class SiteDaoImplTest {
     }
     @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
-        Site newsite = new Site("New site");
-        siteDao.persist(newsite);
-        Assertions.assertThat(siteDao.findById(newsite.getId())).isNotNull();
-        siteDao.delete(newsite);
-        Assertions.assertThat(siteDao.findById(newsite.getId())).isNull();
+
+        Site newsite = siteDao.findById("site1");
+        Assertions
+                .assertThatThrownBy(() -> {
+                    siteDao.delete(newsite);
+                    entityManager.flush();
+                })
+                .isExactlyInstanceOf(PersistenceException.class)
+                .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
     }
 
 
