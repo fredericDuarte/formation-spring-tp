@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 
 // Note :ComponentScan recherche les beans définis dans le package
@@ -32,47 +33,83 @@ public class MeasureDaoImplTest {
 
     @Test
     public void findById() {
-        Measure measure = measureDao.findById(-1L);
-        Assertions.assertThat(measure.getId()).isEqualTo(-1L);
-        Assertions.assertThat(measure.getInstant()).isEqualTo(Instant.parse("2018-09-09T11:00:00.000Z"));
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
-        Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Eolienne");
-        Assertions.assertThat(measure.getCaptor().getSite().getName()).isEqualTo("Bigcorp Lyon");
+        Optional<Measure> measure = measureDao.findById(-1L);
+        Assertions.assertThat(measure)
+                 .get()
+                 .extracting(Measure::getId, Measure::getInstant, Measure::getValueInWatt,
+                         m -> m.getCaptor().getName(), m -> m.getCaptor().getSite().getName())
+                 .containsExactly(-1L,Instant.parse("2018-09-09T11:00:00.000Z"),1_000_000, "Eolienne", "Bigcorp Lyon");
+
+/*   //equivalent .....
+
+     Assertions.assertThat(measure)
+                .get()
+                .extracting("instant")
+                .containsExactly(Instant.parse("2018-09-09T11:00:00.000Z"));
+
+        Assertions.assertThat(measure)
+                .get()
+                .extracting("valueInWatt")
+                .containsExactly(1_000_000);*/
+
+
     }
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        Measure measure = measureDao.findById(-1000L);
-        Assertions.assertThat(measure).isNull();
+        Optional<Measure> measure = measureDao.findById(-1000L);
+        Assertions.assertThat(measure).isEmpty();
     }
     @Test
     public void findAll() {
         List<Measure> measures = measureDao.findAll();
         Assertions.assertThat(measures).hasSize(10);
+
     }
     @Test
     public void create() {
+
         Captor captor = new Captor("Eolienne", new Site("site"));
         captor.setId("c1");
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
-        measureDao.persist(new Measure(Instant.now(), 2_333_666, captor));
-        Assertions.assertThat(measureDao.findAll()).hasSize(11);
+        measureDao.save(new Measure(Instant.now(), 2_333_666, captor));
+        Assertions.assertThat(measureDao.findAll())
+                .hasSize(11)
+                .extracting(Measure::getValueInWatt)
+                .contains(2_333_666);
     }
 
     @Test
     public void update() {
-        Measure measure = measureDao.findById(-1L);
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
-        measure.setValueInWatt(2_333_666);
+        Optional<Measure> measure = measureDao.findById(-1L);
+        Assertions.assertThat(measure)
+                .get()
+                .extracting("valueInWatt")
+                .contains(1000000);
 
-        measureDao.persist(measure);
-        measure = measureDao.findById(-1L);
-        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(2_333_666);
+        measure.ifPresent(s -> {
+            s.setValueInWatt(2333699);
+            measureDao.save(s);
+
+        });
+
+        measure= measureDao.findById(-1L);
+        Assertions.assertThat(measure).get()
+                .extracting("valueInWatt")
+                .contains(2333699);
+
     }
     @Test
     public void deleteById() {
+
+        Captor captor = new Captor("Eolienne", new Site("site"));
+        captor.setId("c1");
+        Measure measure = new Measure(Instant.now(), 2_333_666, captor);
+        measureDao.save(measure);
+
+
+        Assertions.assertThat(measureDao.findAll()).hasSize(11);
+        measureDao.delete(measure);
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
-        measureDao.delete(measureDao.findById(-1L));
-        Assertions.assertThat(measureDao.findAll()).hasSize(9);
     }
 
 

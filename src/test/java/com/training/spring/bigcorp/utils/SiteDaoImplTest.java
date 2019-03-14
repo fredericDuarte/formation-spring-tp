@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -29,7 +30,7 @@ public class SiteDaoImplTest {
 
     @Autowired
     private SiteDao siteDao;
-    private Site site;
+
 
     @Autowired
     private EntityManager entityManager;
@@ -37,14 +38,17 @@ public class SiteDaoImplTest {
     
     @Test
     public void findById() {
-        site = siteDao.findById("site1");
-        Assertions.assertThat(site.getName()).isEqualTo("Bigcorp Lyon");
+       Optional<Site> site = siteDao.findById("site1");
+        Assertions.assertThat(site)
+                .get()
+                .extracting("name")
+                .containsExactly("Bigcorp Lyon");
     }
 
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        site = siteDao.findById("unknown");
-        Assertions.assertThat(site).isNull();
+        Optional<Site> site = siteDao.findById("unknown");
+        Assertions.assertThat(site).isEmpty();
     }
 
     @Test
@@ -56,26 +60,40 @@ public class SiteDaoImplTest {
                 .contains(Tuple.tuple("site1", "Bigcorp Lyon"));
     }
     
-
     @Test
-    public void persist() {
-        Assertions.assertThat(siteDao.findAll()).hasSize(1);
-        siteDao.persist(new Site("New Site"));
-        Assertions.assertThat(siteDao.findAll())
-                .hasSize(2)
-                .extracting(Site::getName)
-                .contains("Bigcorp Lyon", "New Site");
+    public void create()
+    {
+            Assertions.assertThat(siteDao.findAll()).hasSize(1);
+
+            siteDao.save(new Site("New site"));
+
+            Assertions.assertThat(siteDao.findAll())
+                    .hasSize(2)
+                    .extracting(Site::getName)
+                    .contains("Bigcorp Lyon","New site");
+
     }
 
 
     @Test
     public void update() {
-        Site Site = siteDao.findById("site1");
-        Assertions.assertThat(Site.getName()).isEqualTo("Bigcorp Lyon");
-        Site.setName("Bigcorp Lyon & Paris");
-        siteDao.persist(Site);
-        Site = siteDao.findById("site1");
-        Assertions.assertThat(Site.getName()).isEqualTo("Bigcorp Lyon & Paris");
+        Optional<Site> site = siteDao.findById("site1");
+        Assertions.assertThat(site)
+                .get()
+        .extracting("name")
+                .containsExactly("Bigcorp Lyon");
+
+           site.ifPresent(s -> {
+               s.setName(("Site updated"));
+               siteDao.save(s);
+
+           });
+
+           site = siteDao.findById("site1");
+        Assertions.assertThat(site).get().extracting("name").containsExactly("Site updated");
+
+
+
     }
 
    // le test echoue car l'element supprimé n existe pas dans la bdd, donc le test retourne faux
@@ -83,15 +101,15 @@ public class SiteDaoImplTest {
     @Test
     public void deleteById() {
         Site newSite = new Site("New Site");
-        siteDao.persist(newSite);
-        Assertions.assertThat(siteDao.findById(newSite.getId())).isNotNull();
+        siteDao.save(newSite);
+        Assertions.assertThat(siteDao.findById(newSite.getId())).isNotEmpty();
         siteDao.delete(newSite);
-        Assertions.assertThat(siteDao.findById(newSite.getId())).isNull();
+        Assertions.assertThat(siteDao.findById(newSite.getId())).isEmpty();
     }
     @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
 
-        Site newsite = siteDao.findById("site1");
+        Site newsite = siteDao.getOne("site1");
         Assertions
                 .assertThatThrownBy(() -> {
                     siteDao.delete(newsite);
