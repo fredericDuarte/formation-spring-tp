@@ -1,10 +1,8 @@
 package com.training.spring.bigcorp.utils;
 
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.PowerSource;
-import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.model.*;
+
 import com.training.spring.bigcorp.repository.CaptorDao;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -23,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-import java.time.Instant;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +49,7 @@ public class CaptorDaoImplTest {
     public void create() {
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
 
-        Captor captor = new Captor("New captor", site);
-        captor.setPowerSource(PowerSource.SIMULATED);
+        Captor captor = new SimulatedCaptor("New captor", site,10000,20000);
         captorDao.save(captor);
         Assertions.assertThat(captorDao.findAll())
                 .hasSize(3)
@@ -62,6 +59,8 @@ public class CaptorDaoImplTest {
 
     @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
+
+
         Captor captor = captorDao.getOne("c1");
         Assertions
                 .assertThatThrownBy(() -> {
@@ -74,13 +73,14 @@ public class CaptorDaoImplTest {
 
     @Test
     public void findById() {
-        Optional<Captor> captor = captorDao.findById("c1");
+
+       // Captor captor = new SimulatedCaptor("New captor", site,10000,20000);
+       Optional<Captor> captor = captorDao.findById("c1");
         Assertions.assertThat(captor)
                 .get()
-                .extracting(Captor::getId, Captor::getName, Captor::getPowerSource,
+                .extracting(Captor::getId, Captor::getName,
                         m -> m.getSite().getId() )
-                .containsExactly("c1", "Eolienne", PowerSource.SIMULATED,"site1");
-
+                .containsExactly("c1", "Eolienne","site1");
     }
 
     @Test
@@ -122,7 +122,7 @@ public class CaptorDaoImplTest {
 
     @Test
     public void deleteById() {
-        Captor newcaptor = new Captor("New captor", site);
+        Captor newcaptor = new FixedCaptor("New captor", site, 850000);
         captorDao.save(newcaptor);
         Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNotEmpty();
         captorDao.delete(newcaptor);
@@ -139,7 +139,9 @@ public class CaptorDaoImplTest {
 
         Site site = new Site();
         site.setId("siteId");
-        Captor captor = new Captor("olien", site);
+      //  Captor captor = new FixedCaptor("New captor", site, 850000);
+        Captor captor = new RealCaptor("Eolienne", new Site("site"));
+
         captor.setId("c1");
 
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));

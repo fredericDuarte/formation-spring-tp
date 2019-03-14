@@ -1,10 +1,7 @@
 package com.training.spring.bigcorp.service;
 
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.MeasureStep;
-import com.training.spring.bigcorp.model.PowerSource;
+import com.training.spring.bigcorp.model.*;
 import com.training.spring.bigcorp.service.measure.FixedMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +38,7 @@ public class FixedMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new Captor("test", PowerSource.FIXED);
+    private Captor captor = new RealCaptor("test",new Site("site"));
     /**
      * Start instant used in tests
      */

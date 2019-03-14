@@ -6,7 +6,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class Captor {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Captor {
     /**
      * Captor id
      */
@@ -19,11 +20,7 @@ public class Captor {
     @Column(nullable = false)
     private String name;
 
-    /**
-     *  PowerSource
-     */
-    @Enumerated(EnumType.STRING)
-    private PowerSource powerSource;
+
 
     /**
      * Site
@@ -32,7 +29,7 @@ public class Captor {
     private Site site;
 
 
-    private Integer defaultPowerInWatt;
+
 
 
     @Deprecated
@@ -45,9 +42,9 @@ public class Captor {
      *
      * @param name
      */
-    public Captor(String name, PowerSource powerSource) {
+    public Captor(String name) {
         this.name = name;
-        this.powerSource = powerSource;
+
 
     }
 
@@ -56,16 +53,6 @@ public class Captor {
         this.site = site;
     }
 
-    /**
-     * Constructor to use with required property
-     *
-     * @param name
-     */
-    public Captor(String name, PowerSource powerSource, Site site) {
-        this.name = name;
-        this.powerSource = powerSource;
-        this.site = site;
-    }
 
     public String getId() {
         return id;
@@ -83,13 +70,6 @@ public class Captor {
         this.name = name;
     }
 
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
-
-    public void setPowerSource(PowerSource powerSource) {
-        this.powerSource = powerSource;
-    }
 
     public Site getSite() {
         return site;
@@ -99,13 +79,6 @@ public class Captor {
         this.site = site;
     }
 
-    public Integer getDefaultPowerInWatt() {
-        return defaultPowerInWatt;
-    }
-
-    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
-        this.defaultPowerInWatt = defaultPowerInWatt;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -114,13 +87,12 @@ public class Captor {
         Captor captor = (Captor) o;
         return Objects.equals(id, captor.id) &&
                 Objects.equals(name, captor.name) &&
-                powerSource == captor.powerSource &&
                 Objects.equals(site, captor.site);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, powerSource, site);
+        return Objects.hash(id, name,  site);
     }
 
     @Override
@@ -128,7 +100,6 @@ public class Captor {
         return "Captor{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", powerSource=" + powerSource +
                 ", site=" + site +
                 '}';
     }
