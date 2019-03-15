@@ -10,28 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 
-
 @SpringBootApplication
-@EnableConfigurationProperties
 public class BigcorpApplication {
-	private final static Logger logger = LoggerFactory.getLogger(SiteService.class);
-
 	public static void main(String[] args) {
-
-		ApplicationContext context = SpringApplication.run(BigcorpApplication.class,
-				args);
-		BigCorpApplicationProperties applicationInfo = context.getBean(BigCorpApplicationProperties.class);
-
-
-		logger.info("Application startup");
-
-		SiteService siteservice = context.getBean(SiteService.class);
-		//logger.info(siteservice.findById("siteA"));
-
-		logger.info("==========================================================");
-		logger.info("Application [" + applicationInfo.getName() + "] - version : "
-				+ applicationInfo.getVersion());
-		logger.info("plus d'informations sur " + applicationInfo.getWebSiteUrl());
-		logger.info("==========================================================");
+		SpringApplication.run(BigcorpApplication.class, args);
 	}
 }

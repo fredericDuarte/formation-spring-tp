@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>Site BigCorp</title>
+    {{> partial-import}}
+</head>
+
+<body>
+    {{> partial-header}}
+    <div class="container">
+        {{#captor.id}}<h1>Modification capteur fixe</h1>{{/captor.id}}
+        {{^captor.id}}<h1>Création d'un capteur fixe</h1>{{/captor.id}}
+
+{{^captor.id}}
+        <form action="/sites/{{siteId.id}}/captors/FIXED" method="post">
+            <div class="form-group">
+       
+           <label for="siteName">Site</label>
+                <input type="text" readonly class="form-control" id="siteName" value="{{siteId.name}}">
+                <label for="name">Nom</label>
+                <input type="text" class="form-control" id="name" name="name" required
+                    value="{{#captor.name}}{{captor.name}}{{/captor.name}}" aria-describedby="nameHelp"
+                    placeholder="Nom du captor">
+                <small id="nameHelp" class="form-text text-muted">Le nom d'un capteur doit
+                    être unique</small>
+                <input type="text" class="form-control" id="defaultPowerInWatt" name="defaultPowerInWatt" required
+                    value="{{#captor.defaultPowerInWatt}}{{captor.defaultPowerInWatt}}{{/captor.defaultPowerInWatt}}" aria-describedby="defaultHelp"
+                    placeholder="Puissance en Watt">
+                <small id="defaultHelp" class="form-text text-muted">La valeur Watt d'un capteur ne doit
+                    être nulle</small>
+            </div>
+            {{#captor.id}}<input type="hidden" class="form-control" name="id" value="{{captor.id}}">{{/captor.id}}
+
+          
+            <a class="btn btn-secondary" href="/sites">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            {{#captor.id}}<button type="button" class="btn btn-danger" data-toggle="modal"
+                data-target="#deleteModal">Supprimer</button>{{/captor.id}}
+        </form>
+        {{/captor.id}}
+    </div>
+
+    {{> partial-footer}}
+</body>
+
+</html>

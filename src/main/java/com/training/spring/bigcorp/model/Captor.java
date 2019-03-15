@@ -1,10 +1,7 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -16,7 +13,14 @@ public abstract class Captor {
      * Captor id
      */
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
+
+
+
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     /**
      * Captor name
@@ -37,14 +41,10 @@ public abstract class Captor {
     @ManyToOne
     private Site site;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private PowerSource powerSource;
 
-
-
-
-    @Deprecated
-    public Captor() {
-        // Use for serializer or deserializer
-    }
 
     /**
      * Constructor to use with required property
@@ -57,10 +57,21 @@ public abstract class Captor {
 
     }
 
+    public Captor() {
+    }
+
     public Captor(String name, Site site) {
         this.name = name;
         this.site = site;
     }
+
+    public Captor(String name, Site site, PowerSource powerSource) {
+        this.name = name;
+        this.site = site;
+        this.powerSource = powerSource;
+    }
+
+
 
 
     public String getId() {
@@ -95,6 +106,14 @@ public abstract class Captor {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public void setPowerSource(PowerSource powerSource) {
+        this.powerSource = powerSource;
     }
 
     @Override

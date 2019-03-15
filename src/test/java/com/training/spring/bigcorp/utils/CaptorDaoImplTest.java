@@ -4,6 +4,8 @@ package com.training.spring.bigcorp.utils;
 import com.training.spring.bigcorp.model.*;
 
 import com.training.spring.bigcorp.repository.CaptorDao;
+import com.training.spring.bigcorp.repository.MeasureDao;
+import com.training.spring.bigcorp.repository.SiteDao;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.hibernate.exception.ConstraintViolationException;
@@ -37,7 +39,15 @@ public class CaptorDaoImplTest {
 
     @Autowired
     private CaptorDao captorDao;
+
+    @Autowired
+    private MeasureDao measureDao;
+
+    @Autowired
+    private SiteDao siteDao;
+
     private Site site;
+
 
     @Before
     public void init() {
@@ -133,6 +143,7 @@ public class CaptorDaoImplTest {
     }
 
     //TODO
+    /*
     @Test
     public void findByExample() {
         ExampleMatcher matcher = ExampleMatcher.matching()
@@ -153,7 +164,7 @@ public class CaptorDaoImplTest {
                 .extracting("id", "name")
                 .containsExactly(Tuple.tuple("c1", "Eolienne"));
 
-    }
+    }   */
 
 
 
@@ -192,6 +203,16 @@ public class CaptorDaoImplTest {
         // à 0 je dois avoir une exception
         Assertions.assertThatThrownBy(() -> captorDao.save(captor))
                 .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
+    }
+
+
+    @Test
+    public void deleteBySiteId() {
+        Assertions.assertThat(captorDao.findBySiteId("site1")).hasSize(2);
+        measureDao.deleteAll();
+        captorDao.deleteBySiteId("site1");
+        siteDao.delete(site);
+        Assertions.assertThat(captorDao.findBySiteId("site1")).isEmpty();
     }
 
 

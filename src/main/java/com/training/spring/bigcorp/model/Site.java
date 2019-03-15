@@ -1,10 +1,7 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -15,7 +12,11 @@ public class Site {
      * Site id
      */
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
+    @PrePersist
+    public void generateId() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     /**
      * Site name
@@ -33,10 +34,7 @@ public class Site {
     @OneToMany(mappedBy = "site")
     private Set<Captor> captors;
 
-    @Deprecated
-    public Site() {
-        // Use for serializer or deserializer
-    }
+
 
     /**
      * Constructor to use with required property
@@ -45,6 +43,16 @@ public class Site {
      */
     public Site(String name) {
         this.name = name;
+    }
+
+
+    @AssertTrue(message = "name must be not null")
+    public boolean isValid(){
+        return this.name != null;
+    }
+
+
+    public Site() {
     }
 
     public String getId() {
@@ -100,4 +108,6 @@ public class Site {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
 }

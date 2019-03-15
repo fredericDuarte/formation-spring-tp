@@ -13,6 +13,7 @@ public class RealCaptor extends Captor{
 
 
     public RealCaptor(String name, Site site) {
-        super(name, site);
+
+        super(name, site, PowerSource.FIXED);
     }
 }

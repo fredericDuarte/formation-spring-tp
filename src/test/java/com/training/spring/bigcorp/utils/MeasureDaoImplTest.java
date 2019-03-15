@@ -41,10 +41,10 @@ public class MeasureDaoImplTest {
     public void findById() {
         Optional<Measure> measure = measureDao.findById(-1L);
         Assertions.assertThat(measure)
-                 .get()
-                 .extracting(Measure::getId, Measure::getInstant, Measure::getValueInWatt,
-                         m -> m.getCaptor().getName(), m -> m.getCaptor().getSite().getName())
-                 .containsExactly(-1L,Instant.parse("2018-09-09T11:00:00.000Z"),1_000_000, "Eolienne", "Bigcorp Lyon");
+                .get()
+                .extracting(Measure::getId, Measure::getInstant, Measure::getValueInWatt,
+                        m -> m.getCaptor().getName(), m -> m.getCaptor().getSite().getName())
+                .containsExactly(-1L, Instant.parse("2018-08-09T11:00:00.000Z"), 1_000_000, "Eolienne", "Bigcorp Lyon");
 
 /*   //equivalent .....
 
@@ -60,17 +60,20 @@ public class MeasureDaoImplTest {
 
 
     }
+
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
         Optional<Measure> measure = measureDao.findById(-1000L);
         Assertions.assertThat(measure).isEmpty();
     }
+
     @Test
     public void findAll() {
         List<Measure> measures = measureDao.findAll();
         Assertions.assertThat(measures).hasSize(10);
 
     }
+
     @Test
     public void create() {
 
@@ -98,18 +101,19 @@ public class MeasureDaoImplTest {
 
         });
 
-        measure= measureDao.findById(-1L);
+        measure = measureDao.findById(-1L);
         Assertions.assertThat(measure).get()
                 .extracting("valueInWatt")
                 .contains(2333699);
 
     }
+
     @Test
     public void deleteById() {
 
         Captor captor = new RealCaptor("Eolienne", new Site("site"));
         captor.setId("c1");
-        Measure measure = new Measure(Instant.now(), 2_333_666, captor);
+        Measure measure = new Measure(Instant.parse("2018-09-01T22:00:00Z"), 2_333_666, captor);
         measureDao.save(measure);
 
 
@@ -117,6 +121,17 @@ public class MeasureDaoImplTest {
         measureDao.delete(measure);
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
     }
+
+
+    @Test
+    public void deleteByCaptorId() {
+        Assertions.assertThat(measureDao.findAll().stream().filter(m ->
+                m.getCaptor().getId().equals("c1"))).hasSize(5);
+        measureDao.deleteByCaptorId("c1");
+        Assertions.assertThat(measureDao.findAll().stream().filter(m ->
+                m.getCaptor().getId().equals("c1"))).isEmpty();
+    }
+
 
     @Test
     public void preventConcurrentWrite() {
@@ -142,7 +157,6 @@ public class MeasureDaoImplTest {
         Assertions.assertThatThrownBy(() -> measureDao.save(measure))
                 .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
-
 
 
 }

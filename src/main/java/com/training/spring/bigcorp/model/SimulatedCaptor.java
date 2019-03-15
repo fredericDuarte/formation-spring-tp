@@ -2,6 +2,7 @@ package com.training.spring.bigcorp.model;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,17 +16,19 @@ public class SimulatedCaptor extends Captor{
     private Integer maxPowerInWatt;
 
     public SimulatedCaptor() {
+        super();
     }
 
-    public SimulatedCaptor(Integer minPowerInWatt, Integer maxPowerInWatt) {
-        this.minPowerInWatt = minPowerInWatt;
-        this.maxPowerInWatt = maxPowerInWatt;
-    }
 
     public SimulatedCaptor(String name, Site site, Integer minPowerInWatt, Integer maxPowerInWatt) {
-        super(name, site);
+        super(name, site, PowerSource.FIXED);
         this.minPowerInWatt = minPowerInWatt;
         this.maxPowerInWatt = maxPowerInWatt;
+    }
+
+    @AssertTrue(message = "minPowerInWatt should be less than maxPowerInWatt")
+    public boolean isValid(){
+        return this.minPowerInWatt <= this.maxPowerInWatt;
     }
 
     public Integer getMinPowerInWatt() {
