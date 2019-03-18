@@ -2,6 +2,8 @@ package com.training.spring.bigcorp.controller;
 
 
 import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.exception.NotFoundException;
+
 import com.training.spring.bigcorp.repository.CaptorDao;
 import com.training.spring.bigcorp.repository.MeasureDao;
 import com.training.spring.bigcorp.repository.SiteDao;
@@ -52,7 +54,7 @@ public class SiteController {
     public ModelAndView findById(@PathVariable String id) {
         return new ModelAndView("site")
                 .addObject("site",
-                        siteDao.findById(id).orElseThrow(IllegalArgumentException::new));
+                        siteDao.findById(id).orElseThrow(NotFoundException::new));
     }
 
     // créer un nouveau site
@@ -69,7 +71,7 @@ public class SiteController {
 
         } else {
             Site siteToPersist =
-                    siteDao.findById(site.getId()).orElseThrow(IllegalArgumentException::new);
+                    siteDao.findById(site.getId()).orElseThrow(NotFoundException::new);
 // L'utilisateur ne peut changer que le nom du site sur l'écran
             siteToPersist.setName(site.getName());
             return new ModelAndView("sites").addObject("sites", siteDao.findAll());
@@ -81,7 +83,7 @@ public class SiteController {
     public ModelAndView delete(@PathVariable String id) {
         // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire
         // le ménage avant pour ne pas avoir d'erreur à la suppression d'un site utilisé   ailleurs dans la base
-        Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        Site site = siteDao.findById(id).orElseThrow(NotFoundException::new);
         site.getCaptors().forEach(c -> measureDao.deleteByCaptorId(c.getId()));
         captorDao.deleteBySiteId(id);
         siteDao.delete(site);
@@ -91,7 +93,7 @@ public class SiteController {
 
     @GetMapping("/{id}/measures")
     public ModelAndView findMeasuresById(@PathVariable String id) {
-        Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        Site site = siteDao.findById(id).orElseThrow(NotFoundException::new);
 // Comme les templates ont une intelligence limitée on concatène ici les id de captor dans une chaine
 // de caractères qui pourra être exeploitée tel quelle
         String captors = site.getCaptors().stream()
