@@ -38,7 +38,7 @@ public class FixedMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new RealCaptor("test",new Site("site"));
+    private FixedCaptor captor = new FixedCaptor("test",new Site("site"));
     /**
      * Start instant used in tests
      */

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 /*
 page web:
@@ -78,8 +79,8 @@ public class SiteController {
     // détruire un site existant
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String id) {
-    // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire
-    // le ménage avant pour ne pas avoir d'erreur à la suppression d'un site utilisé   ailleurs dans la base
+        // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire
+        // le ménage avant pour ne pas avoir d'erreur à la suppression d'un site utilisé   ailleurs dans la base
         Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
         site.getCaptors().forEach(c -> measureDao.deleteByCaptorId(c.getId()));
         captorDao.deleteBySiteId(id);
@@ -88,8 +89,19 @@ public class SiteController {
     }
 
 
-
-
+    @GetMapping("/{id}/measures")
+    public ModelAndView findMeasuresById(@PathVariable String id) {
+        Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
+// Comme les templates ont une intelligence limitée on concatène ici les id de captor dans une chaine
+// de caractères qui pourra être exeploitée tel quelle
+        String captors = site.getCaptors().stream()
+                .map(c -> "{ id: '" + c.getId() + "', name: '" + c.getName()
+                        + "'}")
+                .collect(Collectors.joining(","));
+        return new ModelAndView("site-measures")
+                .addObject("site", site)
+                .addObject("captors", captors);
+    }
 
 
 }

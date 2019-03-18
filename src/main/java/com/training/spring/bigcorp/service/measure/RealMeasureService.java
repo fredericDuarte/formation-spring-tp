@@ -2,9 +2,7 @@ package com.training.spring.bigcorp.service.measure;
 
 
 import com.training.spring.bigcorp.config.properties.BigCorpApplicationProperties;
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.MeasureStep;
+import com.training.spring.bigcorp.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,32 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("realMeasure")
-public class RealMeasureService implements MeasureService {
+public class RealMeasureService implements MeasureService<RealCaptor> {
 
     @Autowired
     private BigCorpApplicationProperties properties;
 
-    private Integer defaultValue;
+
     @Override
-    public List<Measure> readMeasures(Captor captor, Instant start, Instant end, MeasureStep step) {
+    public List<Measure> readMeasures(RealCaptor captor, Instant start, Instant end, MeasureStep step) {
 
         checkReadMeasuresAgrs(captor,start,end,step);
         List<Measure> measures = new ArrayList<>();
         Instant current = start;
         while(current.isBefore(end)){
-            measures.add(new Measure(current, getDefaultValue(), captor));
+            measures.add(new Measure(current, properties.getMeasure().getDefaultReal(), captor));
             current = current.plusSeconds(step.getDurationInSecondes());
         }
         return measures;
     }
 
-    public Integer getDefaultValue() {
-        return properties.getMeasure().getDefaultFixed();
-    }
-
-
-    @Override
-    public String toString() {
-        return "RealMeasureService{}";
-    }
 }
