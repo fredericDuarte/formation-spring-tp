@@ -50,8 +50,11 @@
                 </fieldset>
             </div>
             {{/site.id}}
+
+            <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
             <a class="btn btn-secondary" href="/sites">Annuler</a>
             <button type="submit" class="btn btn-primary">Enregistrer</button>
+            
             {{#site.id}}<button type="button" class="btn btn-danger" data-toggle="modal"
                 data-target="#deleteModal">Supprimer</button>{{/site.id}}
         </form>
@@ -76,6 +79,7 @@ Close">
                         <button type="button" class="btn btn-secondary" datadismiss="
 modal">Close</button>
                         <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
                     </form>
                 </div>
             </div>

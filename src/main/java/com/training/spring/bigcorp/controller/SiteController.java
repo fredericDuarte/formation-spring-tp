@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.controller;
 
 
+import com.training.spring.bigcorp.config.SecurityConfig;
 import com.training.spring.bigcorp.model.Site;
 import com.training.spring.bigcorp.exception.NotFoundException;
 
@@ -9,6 +10,7 @@ import com.training.spring.bigcorp.repository.MeasureDao;
 import com.training.spring.bigcorp.repository.SiteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +60,7 @@ public class SiteController {
     }
 
     // créer un nouveau site
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @GetMapping("/create")
     public ModelAndView create(Model model) {
         return new ModelAndView("site").addObject("site", new Site());
@@ -79,6 +82,7 @@ public class SiteController {
     }
 
     // détruire un site existant
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String id) {
         // Comme les capteurs sont liés à un site et les mesures sont liées à un capteur, nous devons faire

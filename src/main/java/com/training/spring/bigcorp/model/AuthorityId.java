@@ -1,0 +1,45 @@
+package com.training.spring.bigcorp.model;
+
+import javax.persistence.Embeddable;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Objects;
+
+@Embeddable
+public class AuthorityId implements Serializable {
+    @Size(max = 200)
+    private String username;
+    @Size(max = 50)
+    private String authority;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuthorityId)) return false;
+        AuthorityId that = (AuthorityId) o;
+        return username.equals(that.username) &&
+                authority.equals(that.authority);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, authority);
+    }
+}

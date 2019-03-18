@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.controller;
 
 
+import com.training.spring.bigcorp.config.SecurityConfig;
 import com.training.spring.bigcorp.model.FixedCaptor;
 import com.training.spring.bigcorp.model.SimulatedCaptor;
 import com.training.spring.bigcorp.model.Site;
@@ -9,6 +10,7 @@ import com.training.spring.bigcorp.repository.MeasureDao;
 import com.training.spring.bigcorp.repository.SiteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,7 @@ public class SimuCaptorController {
 
 
     // créer un nouveau captor
+    @Secured(SecurityConfig.ROLE_ADMIN)
     @GetMapping("create")
     public ModelAndView createFixed(@PathVariable("siteId") String siteId, Model model) {
         return new ModelAndView("captorCreate")
